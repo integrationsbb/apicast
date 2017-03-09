@@ -69,8 +69,6 @@ GET /?user_key=value
 --- response_body chomp
 no mapping rules!
 --- error_code: 412
---- error_log
-skipping after action, no cached key
 
 === TEST 3: authentication credentials invalid
 The message is configurable and default status is 403.
@@ -469,6 +467,7 @@ env RESOLVER=127.0.0.1:1953;
 --- http_config
   include $TEST_NGINX_UPSTREAM_CONFIG;
   lua_package_path "$TEST_NGINX_LUA_PATH";
+  lua_shared_dict api_keys 1m;
   init_by_lua_block {
     require('configuration_loader').mock({
       services = {
@@ -502,6 +501,7 @@ env RESOLVER=127.0.0.1:1953;
        if ngx.var.host == 'localhost.example.com' then
          ngx.exit(200)
        else
+         ngx.log(ngx.ERR, 'invalid host: ', ngx.var.host)
          ngx.exit(404)
        end
      }

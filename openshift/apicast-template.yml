@@ -56,6 +56,8 @@ objects:
             value: "${REDIS_PORT}"
           - name: APICAST_MANAGEMENT_API
             value: "${MANAGEMENT_API}"
+          - name: APICAST_REPORTING_THREADS
+            value: "${REPORTING_THREADS}"
           image: "${IMAGE_NAME}"
           imagePullPolicy: Always
           name: "${APICAST_NAME}"
@@ -156,3 +158,7 @@ parameters:
   description: "Scope of the Management API. Can be disabled, status or debug. At least status required for health checks."
   required: false
   value: "status"
+- name: REPORTING_THREADS
+  description: "Number of asynchronous reporting threads. Experimental feature."
+  required: false
+  value: "0"
